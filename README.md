@@ -1,186 +1,405 @@
-# Novapay-fraudulent - Real‑Time Fraud Detection
+<div align="center">
 
-## Overview
+# 🛡️ NovaPay FraudGuard
+### Real-Time Fraud Detection for Digital Payments
 
-NovaPay Fraud is a real-time fraud detection project created to improve the safety and reliability of digital financial transactions across web, mobile, and ATM channels. In today’s fast-moving payment environment, transactions happen within seconds, which means suspicious activity must also be identified just as quickly. This project was designed with that need in mind. It uses historical transaction records, behavioral patterns, and carefully engineered features to help detect unusual activity that may indicate fraud.
+--------  
+**![NovaPayAI Dashboard](./NovaPayAI%20Dashboard.png)**  
+--------
 
-The main goal of NovaPay FraudGuard is to support early detection rather than reacting after damage has already occurred. By studying how customers normally behave, how transactions vary across channels, and how activity changes by time of day, the system can highlight transactions that appear inconsistent or risky. This makes it possible to flag potential fraud in real time and reduce the chance of financial loss.
-
-In addition to improving fraud detection, the project also aims to strengthen trust in the payment platform. When customers feel that their transactions are being monitored intelligently and securely, they are more likely to use the service with confidence. For that reason, NovaPay FraudGuard is not only a technical solution but also an important step toward building a safer and more dependable digital payment experience.
-
-## Problem Statement
-
-Fraud continues to be one of the most serious challenges facing digital payment systems. It affects businesses, customers, and financial institutions by causing direct monetary losses, increasing operational costs, and weakening trust in the platform. Even a small number of fraudulent transactions can create a major impact when transaction volumes are high, which is why early detection is so important.
-
-An analysis of the NovaPay transaction dataset shows that approximately **9%** of all recorded transactions are fraudulent. While this may seem like a relatively small proportion, it represents a meaningful risk when considered across a large number of daily transactions. The data also shows that fraud is not evenly spread across all transactions. Instead, it appears more frequently in certain channels, especially web-based transactions, and during specific time periods, particularly in the early morning hours.
-
-These patterns suggest that fraud is influenced by more than just random chance. Transaction channel, timing, and customer behavior all appear to play a role in how fraudulent activity occurs. This makes manual review alone too slow and too limited to handle the problem effectively. As digital transactions continue to grow, there is a clear need for a smarter and more proactive approach.
-
-A data-driven fraud detection system is therefore necessary to identify suspicious transactions as they happen, support faster decision-making, reduce financial exposure, and improve the overall security of the payment platform. By detecting risk earlier, NovaPay FraudGuard helps protect both the business and its customers while creating a more trustworthy transaction environment.
-
-# Specific Objectives
-
-The primary objective of the NovaPay Fraud project is to develop a robust and intelligent fraud detection pipeline capable of identifying suspicious financial transactions in real time. The system is designed to analyze transaction data, recognize abnormal behavioral patterns, and distinguish fraudulent activities from legitimate transactions with a high level of accuracy. Achieving this objective will help reduce financial losses, improve operational efficiency, and strengthen customer confidence in digital payment services.
-
-To accomplish this goal, the project focuses on the following specific objectives:
-
-* **Develop a real-time fraud detection framework** capable of automatically identifying suspicious transactions before they result in financial losses.
-
-* **Analyze historical transaction data** to uncover fraud patterns across different transaction channels, countries, customer groups, and time periods. This analysis provides valuable insights into when, where, and how fraudulent activities are most likely to occur.
-
-* **Engineer meaningful predictive features** such as transaction frequency, account age, chargeback history, customer spending behavior, and transaction velocity. These engineered variables provide additional information that improves the ability of machine learning models to distinguish fraudulent transactions from legitimate ones.
-
-* **Perform comprehensive exploratory data analysis (EDA)** to understand the structure of the dataset, identify trends, detect anomalies, and examine relationships between variables before model development.
-
-* **Conduct statistical and correlation analysis** to identify the strongest predictors of fraud and understand the relationships among numerical and categorical variables.
-
-* **Create informative data visualizations** that clearly communicate fraud patterns, customer behavior, transaction trends, and model insights, enabling stakeholders to make informed business decisions.
-
-* **Prepare a clean and reliable analytical dataset** by removing duplicate records, handling missing values, correcting inconsistent data, and ensuring the dataset is suitable for predictive modeling.
-
-* **Support future machine learning model development** by providing a well-structured dataset with high-quality engineered features that improve model performance and prediction accuracy.
+</div>
 
 ---
 
-# Data Dictionary
+## 📋 Table of Contents
 
-The NovaPay Fraud dataset contains transaction-level information collected from multiple digital payment channels. Each row in the dataset represents a single financial transaction together with customer information, transaction characteristics, and the fraud label used for predictive modeling.
-
-| **Column**         | **Description**                                                                                                    |
-| ------------------ | ------------------------------------------------------------------------------------------------------------------ |
-| **transaction_id** | A unique identifier assigned to each transaction to ensure every transaction can be individually tracked.          |
-| **customer_id**    | A unique identifier assigned to each customer performing transactions on the platform.                             |
-| **timestamp**      | The exact date and time when the transaction occurred. This field is used to generate several time-based features. |
-| **channel**        | The platform through which the transaction was initiated, such as Web, Mobile, ATM, or Unknown.                    |
-| **home_country**   | The country where the customer is officially registered.                                                           |
-| **currency**       | The currency used to perform the transaction.                                                                      |
-| **fee_clean**      | The cleaned transaction fee after preprocessing and data cleaning.                                                 |
-| **is_fraud**       | The target variable indicating whether a transaction is fraudulent (1) or legitimate (0).                          |
-
----
-
-# Engineered Time Variables
-
-To improve fraud detection performance, several additional time-related variables were extracted from the original timestamp column. These engineered features help identify temporal fraud patterns that may not be immediately visible in the raw dataset.
-
-| **Feature**               | **Description**                                                                                                                                              |
-| ------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| **hour**                  | The hour (0–23) during which the transaction occurred. Useful for identifying periods with higher fraud activity.                                            |
-| **day_name**              | The day of the week (Monday to Sunday) on which the transaction occurred.                                                                                    |
-| **month**                 | The calendar month (1–12) of the transaction.                                                                                                                |
-| **year**                  | The year in which the transaction occurred.                                                                                                                  |
-| **is_weekend**            | Indicates whether the transaction occurred during the weekend (1) or on a weekday (0).                                                                       |
-| **transactions_last_24h** | The total number of transactions completed by the same customer within the previous 24 hours. This feature helps detect unusually high transaction activity. |
+1. [Overview](#-overview)
+2. [Problem Statement](#-problem-statement)
+3. [Project Objectives](#-project-objectives)
+4. [Dataset & Data Dictionary](#-dataset--data-dictionary)
+5. [Project Pipeline](#-project-pipeline)
+6. [Data Cleaning & Preprocessing](#-data-cleaning--preprocessing)
+7. [Exploratory Data Analysis](#-exploratory-data-analysis)
+8. [Feature Engineering](#-feature-engineering)
+9. [Modeling Approach](#-modeling-approach)
+10. [Handling Class Imbalance](#-handling-class-imbalance)
+11. [Threshold Tuning & Decision Policy](#-threshold-tuning--decision-policy)
+12. [Model Evaluation & Diagnostics](#-model-evaluation--diagnostics)
+13. [Results Summary](#-results-summary)
+14. [Key Findings](#-key-findings)
+15. [Project Structure](#-project-structure)
+16. [Tech Stack](#-tech-stack)
 
 ---
 
-# Target Variable
+## 🔎 Overview
 
-The **is_fraud** column serves as the target variable for the fraud detection model. It represents the outcome that the machine learning algorithms are trained to predict.
+**NovaPay FraudGuard** is a real-time fraud detection system built to improve the safety and reliability of digital financial transactions across web, mobile, and ATM channels. In a payment environment where transactions clear in seconds, suspicious activity has to be identified just as fast, this project was built around that constraint from the start.
 
-| **Value** | **Meaning**            |
-| --------- | ---------------------- |
-| **1**     | Fraudulent Transaction |
-| **0**     | Legitimate Transaction |
+Rather than reacting to fraud after money has already moved, NovaPay FraudGuard is designed for **early detection**: it studies how customers normally behave, how activity varies by channel and time of day, and how transaction patterns differ between legitimate and fraudulent behavior, then uses that to flag risky transactions before they complete.
 
-This binary classification variable enables the model to learn the characteristics that distinguish fraudulent transactions from genuine customer activities.
+Beyond the technical detection layer, the project also aims to strengthen trust in the platform. When customers know their transactions are monitored intelligently, they use the service with more confidence making this as much a trust and safety investment as a technical one.
 
----
-
-# How to Interpret a Single Transaction
-
-Each row in the dataset represents one completed financial transaction together with the customer's profile and transaction characteristics. By examining the values contained in a single row, analysts can understand the context of the transaction and determine whether it exhibits suspicious behavior.
-
-### Example Transaction
-
-| **Feature**         | **Value**              |
-| ------------------- | ---------------------- |
-| Channel             | Web                    |
-| Home Country        | United States          |
-| Hour                | 15 (3:00 PM)           |
-| Account Age         | 120 Days               |
-| Chargeback History  | 2 Previous Chargebacks |
-| Internal Risk Score | 0.78                   |
-| Fraud Status        | 1 (Fraud)              |
-
-### Interpretation
-
-This transaction was initiated through the **Web** channel by a customer registered in the **United States**. The customer's account has been active for **120 days** and has previously recorded **two chargebacks**, indicating a history of disputed transactions. The transaction occurred at **3:00 PM** and received a relatively high internal risk score of **0.78**, suggesting elevated fraud risk. Based on these characteristics, the transaction was classified as **fraudulent (is_fraud = 1)**.
-
-This example demonstrates how multiple transaction attributes collectively contribute to fraud detection rather than relying on a single indicator.
+--------  
+**![Distribution of Destination Currencies](./Distribution%20of%20Destination%20Currencies.png)**  
+--------
 
 ---
 
-# Data Cleaning and Preprocessing
+## ⚠️ Problem Statement
 
-Data quality is one of the most important factors influencing the performance of any machine learning model. Before conducting exploratory data analysis and model development, the dataset was thoroughly cleaned to improve consistency, accuracy, and reliability.
+Fraud remains one of the most serious challenges facing digital payment systems, causing direct monetary losses, higher operational cost, and eroded customer trust. Even a small fraud rate becomes a large absolute problem at scale.
 
-## Duplicate Record Detection
+Analysis of the NovaPay transaction dataset (**11,400 records, 26 raw variables**) shows:
 
-Duplicate transactions were investigated by examining the **transaction_id** field, which uniquely identifies every transaction.
+- **≈8.8%** of all transactions are fraudulent — a meaningful minority-class problem, not a rounding error
+- Fraud is **not evenly distributed** — it concentrates in specific channels (notably web-based transactions), specific hours (early morning), and specific account-age segments
+- This non-random structure is exactly what makes a **data-driven detection system** viable if fraud were pure noise, no model could learn it
 
-The following steps were performed:
-
-* Checked the dataset for duplicate transaction identifiers.
-* Identified duplicate records resulting from repeated entries.
-* Removed duplicate observations to ensure that each transaction appeared only once.
-* Verified the integrity of the dataset after duplicate removal.
-
-Removing duplicate records prevents biased statistical analysis and ensures that machine learning models are trained using accurate information.
+Manual review alone cannot keep pace with this volume and speed, which is the core motivation for building an automated, statistically grounded detection pipeline.
 
 ---
 
-## Missing Data Investigation
+## 🎯 Project Objectives
 
-The dataset was examined for missing values across all numerical, categorical, and datetime variables.
-
-The investigation included:
-
-* Identifying variables containing missing values.
-* Calculating the percentage of missing observations.
-* Evaluating the impact of missing data on the overall dataset.
-* Determining the most appropriate treatment strategy for each variable.
-
-Special attention was given to important variables such as **currency**, **transaction fee**, **IP address**, **device trust score**, and other transaction-related attributes.
+- **Develop a real-time fraud detection framework** capable of flagging suspicious transactions before financial loss occurs
+- **Analyze historical transaction data** to uncover fraud patterns across channel, geography, customer segment, and time
+- **Engineer meaningful predictive features** transaction velocity, account age, chargeback history, spending behavior  that give the model real separating signal
+- **Perform rigorous EDA** to understand data structure, anomalies, and variable relationships before modeling
+- **Run statistical and correlation analysis** to identify the strongest fraud predictors
+- **Produce clear visualizations** that communicate fraud patterns to technical and non-technical stakeholders alike
+- **Build a clean, leakage-safe analytical dataset** through careful handling of duplicates, missing values, and inconsistent entries
+- **Support future model development** with a well-structured, high-quality feature set
 
 ---
 
-# Handling Missing Values
+## 🗂️ Dataset & Data Dictionary
 
-Different imputation techniques were applied depending on the type and importance of each variable.
+| Column | Description |
+|---|---|
+| `transaction_id` | Unique identifier for each transaction |
+| `customer_id` | Unique identifier for each customer |
+| `timestamp` | Date and time the transaction occurred — source of all time-based features |
+| `channel` | Platform used: Web, Mobile, ATM, or Unknown |
+| `home_country` | Customer's registered country |
+| `source_currency` / `dest_currency` | Currency of origin and destination |
+| `amount_src` / `amount_usd` | Transaction amount in source currency and USD-normalized |
+| `fee` | Transaction fee |
+| `ip_address` / `ip_country` / `ip_risk_score` | Network-level identifiers and a pre-computed risk score |
+| `device_id` / `device_trust_score` / `new_device` | Device-level identifiers and trust signals |
+| `location_mismatch` | Flag for geographic inconsistency between customer and transaction origin |
+| `kyc_tier` | Customer's identity-verification tier |
+| `account_age_days` | Age of the account in days at the time of the transaction |
+| `chargeback_history_count` | Number of prior chargebacks on the account |
+| `risk_score_internal` | Pre-computed internal risk score |
+| `txn_velocity_1h` / `txn_velocity_24h` | Transaction frequency in the trailing 1-hour / 24-hour window |
+| `corridor_risk` | Risk score associated with the source→destination corridor |
+| `is_fraud` | **Target variable** — 1 = fraudulent, 0 = legitimate |
 
-### Numerical Variables
+### Engineered Time Features
 
-Missing numerical values were replaced using the **median** instead of the mean. The median is less sensitive to extreme values and outliers, making it more suitable for financial transaction data.
+| Feature | Description |
+|---|---|
+| `hour` | Hour of day (0–23) the transaction occurred |
+| `day_name` | Day of week |
+| `month` / `year` | Calendar month / year |
+| `is_weekend` | Weekend flag |
+| `transactions_last_24h` | Count of the same customer's transactions in the trailing 24 hours |
 
-### Categorical Variables
+### How to Read a Single Transaction
 
-Missing categorical values were replaced using the **most frequently occurring category (mode)**. Where appropriate, missing categories were labelled as **"UNKNOWN"** to preserve useful information without introducing bias.
+| Feature | Value |
+|---|---|
+| Channel | Web |
+| Home Country | United States |
+| Hour | 15 (3:00 PM) |
+| Account Age | 120 days |
+| Chargeback History | 2 prior chargebacks |
+| Internal Risk Score | 0.78 |
+| **Fraud Status** | **1 (Fraud)** |
 
-### Datetime Variables
-
-The **timestamp** column was converted into a standardized datetime format. Records containing invalid or unreadable timestamps were removed because accurate time information is essential for generating temporal features.
-
-### Currency Information
-
-Missing currency values, particularly transactions involving **USD**, were carefully investigated. Depending on the completeness and reliability of the available information, missing entries were either imputed using the most appropriate category or removed when they could not be reliably recovered.
-
-### Fraud Labels
-
-The target variable (**is_fraud**) was validated to ensure that no missing values were present. Since this variable represents the prediction target, maintaining complete fraud labels is critical for successful machine learning model training.
+**Interpretation:** No single field makes this transaction suspicious on its own a Web channel, mid-afternoon transaction, and moderate account age are all individually unremarkable. It's the **combination** an elevated internal risk score *together with* a prior chargeback history that pushes this transaction into fraud territory. This is the core principle behind the entire modeling approach fraud is rarely a single red flag, it's a pattern across several correlated signals.
 
 ---
 
-# Data Cleaning Summary
+## 🧭 Project Pipeline
 
-The data preprocessing stage resulted in a clean, consistent, and reliable dataset suitable for exploratory data analysis, feature engineering, and predictive modeling. Key preprocessing activities included:
+--------  
+**[ WRITE IMAGE HERE — pipeline flowchart: Raw Data → Cleaning → EDA → Feature Engineering → Train/Test Split → Model Training → Threshold Tuning → Error Analysis → Final Decision Policy ]**  
+--------
 
-* Removal of duplicate transaction records.
-* Detection and treatment of missing values.
-* Standardization of datetime formats.
-* Creation of new temporal features.
-* Validation of fraud labels.
-* Preparation of a high-quality analytical dataset for subsequent machine learning tasks.
+The project was built as an **iterative, hypothesis-driven pipeline** rather than a single linear script. Each stage's output directly informed the next:
 
-These preprocessing steps improve the quality of the data, reduce potential bias, and enhance the performance of the fraud detection models developed in later stages of the project.
+1. **Clean** the raw data (duplicates, missing values, corrupted entries, sentinel values)
+2. **Explore** it to find where and how fraud concentrates
+3. **Engineer features** grounded in what the EDA actually showed, not guesswork
+4. **Train** a baseline model, then iterate with hyperparameter search and rebalancing
+5. **Tune the decision threshold** against real business constraints, not a generic metric
+6. **Diagnose** exactly which transactions the model still misses, and why
+7. **Feed findings back** into targeted feature engineering — repeat until further gains require new data sources, not new modeling
 
+---
+
+## 🧹 Data Cleaning & Preprocessing
+
+Data quality issues were investigated and resolved methodically before any modeling began:
+
+### Duplicate Records
+- Checked `transaction_id` for duplication and removed exact duplicate rows
+- Verified dataset integrity post-removal
+
+### Missing Values
+- Investigated missingness across all numerical, categorical, and datetime columns, with particular attention to `currency`, `fee`, `ip_address`, and `device_trust_score`
+- **Numerical columns:** imputed with the **median** (robust to the heavy-tailed distributions common in transaction data mean would be skewed by legitimate large transactions)
+- **Categorical columns:** imputed with the **mode**, or labeled `"UNKNOWN"` where that preserved more information than guessing a category
+- **Datetime (`timestamp`):** parsed with `errors='coerce'` rather than a strict format, since the raw data contained genuinely corrupted values (e.g. `"2025/13/40 25:61:00"` an impossible month/day/hour/minute combination, not a formatting quirk). Unparseable rows were dropped rather than guessed at, since accurate timing is load-bearing for every time-based feature downstream
+
+### Sentinel / Invalid Values
+- Detected and corrected placeholder "invalid" values that don't represent real missingness but were used as data-entry sentinels  e.g. `fee = -1.0` and `device_trust_score = -0.1` were replaced with proper `Fillna` before imputation, rather than being treated as legitimate (and highly distorting) numeric values
+
+### Currency Normalization
+- Investigated missing `amount_usd` values by cross-referencing `source_currency` and observed conversion rates
+- Applied currency-specific conversion rates to safely backfill recoverable values, and only imputed or dropped values that couldn't be reliably reconstructed
+
+### Negative Amounts
+- Identified legitimate negative values (refunds/reversals) versus data errors, and handled each differently rather than blanket-clipping to zero
+
+--------  
+**![Correlation Heatmap](./Correlation%20Heatmap.png)**  
+--------
+
+---
+
+## 📊 Exploratory Data Analysis
+
+EDA was used to find *where* fraud concentrates every subsequent engineered feature traces back to a pattern found here, not to guesswork.
+
+### Fraud Rate by Time of Day
+Fraud is not evenly distributed across the 24-hour cycle — early-morning hours show a materially elevated fraud rate compared to the daily average.
+
+--------  
+**![Fraud Rate by Hour](./Fraud%20Rate%20by%20Hour.png)**  
+--------
+
+### Fraud Rate by Channel
+Web-based transactions carry a disproportionately higher fraud rate than mobile or ATM channels.
+
+--------  
+**![Fraud Rate by Channel](./Fraud%20Rate%20by%20.png)**   
+--------
+
+### Fraud Rate by Account Age
+This was one of the strongest signals found in the entire dataset:
+
+| Account Age | Fraud Rate |
+|---|---|
+| < 30 days | **35.2%** |
+| 30–90 days | **43.6%** |
+| 91–180 days | 2.6% |
+| 181–365 days | 1.7% |
+| > 1 year | 1.0% |
+| **Overall average** | **8.8%** |
+
+Accounts under 90 days old are **4–5x more likely** to be fraudulent than the dataset average a young account is one of the single clearest fraud indicators available. This finding directly shaped the `age_bucket` and `rate_age_bucket` engineered features (see below).
+
+--------  
+**![Fraud Rate by Account Age](./Fraud%20Rate%20by%20Account%20Age.png)**  
+--------
+
+### Fraud Rate by Chargeback History, Location Mismatch, and New Device
+Each of these categorical/binary signals showed a clear, monotonic relationship with fraud likelihood, confirming they belong in the feature set as both raw values and target-encoded rates.
+
+### Correlation Analysis
+A correlation heatmap across all numerical variables was used to identify the strongest linear fraud predictors and to check for problematic multicollinearity between engineered and raw features before modeling.
+
+--------  
+**![Fraud Correlation Analysis](./Fraud%20Correlation%20Analysis.png)**  
+--------
+
+### Outlier Analysis
+IQR-based outlier detection was run across all numeric columns (`amount_usd`, `fee`, `txn_velocity_1h/24h`, `ip_risk_score`, `chargeback_history_count`, `corridor_risk`, and others).
+
+**Important methodological decision:** in a fraud dataset, statistical "outliers" are frequently not noise  they're often *the fraud signal itself*. An unusually high transaction velocity or risk score is exactly what fraud looks like. Blanket outlier removal or capping was deliberately avoided for these columns, since tree-based models (used throughout this project) are already fairly robust to extreme values, and clipping them risks erasing the very extremity that makes fraud detectable. Outliers were investigated and characterized, not stripped by default.
+
+--------  
+**![ Boxplot](./Boxplot%20.png)**  
+--------
+
+---
+
+## 🛠️ Feature Engineering
+
+Every engineered feature below was added for a specific, EDA-grounded reason — not speculatively. Where a feature was tested and found not to help, that's documented too, since knowing what *doesn't* work is as valuable as knowing what does.
+
+### Time & Bucket Features
+| Feature | Rationale |
+|---|---|
+| `age_bucket` | 5-bin categorical bucketing of `account_age_days`, directly reflecting the sharp fraud-rate cliff found at the 90-day mark |
+| `amount_bucket` | Train-only quantile bucketing of transaction amount, used as an intermediate for target encoding |
+| `hour` | Raw hour of day (0–23), retained continuously since the model can already split on it directly |
+
+### Target-Rate (Mean) Encodings — fit on TRAIN only
+| Feature | Encodes |
+|---|---|
+| `rate_age_bucket` | Historical fraud rate for that age bucket |
+| `rate_kyc_tier` | Historical fraud rate for that KYC tier |
+| `rate_amount_src` | Historical fraud rate for that amount bucket |
+| `rate_chargeback` | Historical fraud rate for that chargeback count |
+
+**Leakage discipline:** every rate encoding above is computed using **only the training split's target values**, then mapped onto both train and test, with unseen categories falling back to the training global mean. Computing these on the full dataset (including test rows) — a mistake caught and corrected during development would leak target information into features and produce an artificially inflated evaluation score.
+
+### Interaction & Ratio Features
+| Feature | Rationale |
+|---|---|
+| `velocity_ratio` = `txn_velocity_1h` / `txn_velocity_24h` | Captures bursty short-window activity relative to a day's baseline — a ratio a tree can't reconstruct from separate splits on the two raw columns |
+| `amount_to_fee_ratio` | Flags a large transaction pushed through at an anomalously low fee a pattern found specifically in missed fraud cases during error analysis |
+| `established_high_velocity`, `established_location_mismatch` | Direct interactions targeting a specific model blind spot (see [Key Findings](#-key-findings)): established accounts that *also* show velocity or location red flags a young account would already be caught on |
+
+### Entity-Linkage Features (device / IP reuse)
+| Feature | Rationale |
+|---|---|
+| `device_shared_accounts` | Count of distinct accounts observed using the same device a classic account-takeover / fraud-ring signal |
+| `ip_shared_accounts` | Same concept, for IP address |
+| `ip_txn_count` | Transaction volume from a given IP, independent of account |
+
+
+
+## 🤖 Modeling Approach
+
+### Preprocessing Pipeline
+- Numeric features: median imputation → standard scaling
+- Categorical features: constant imputation → encoding (label codes for ordinal-like categories, aligned across train/test to avoid unseen-category errors)
+- All ratio-derived features passed through an explicit `inf` sanitization pass before training, since divisions (`amount_to_fee_ratio`, `velocity_ratio`) can produce `inf` on edge-case denominators.
+
+
+**![Summary](./Confusion%20Summary.png)**  
+---
+
+## ⚖️ Handling Class Imbalance
+
+With fraud at ~8.8% of transactions, class imbalance was addressed at two levels simultaneously:
+
+- **`scale_pos_weight`** (XGBoost) / **`class_weight`** (Random Forest) global multipliers that upweight the entire fraud class uniformly, tuned as part of the hyperparameter search
+- **Targeted `sample_weight`** a more surgical intervention that upweights *specifically* the sub-population of fraud cases identified as hardest to detect (established accounts, where age-based signals give no warning), rather than boosting all fraud cases equally
+
+This two-level approach reflects a key finding from the error-analysis stage: fraud in this dataset isn't one homogeneous pattern. Young-account, high-velocity fraud is comparatively easy to separate; established-account fraud is a smaller, harder sub-population that a single global class weight tends to under-serve.
+
+---
+
+## 🎚️ Threshold Tuning & Decision Policy
+
+A single, generic threshold (e.g. 0.5, or "hit 80% recall") was deliberately **not** used as the final decision rule, for a concrete reason found during development: optimizing purely for recall let false positives on legitimate transactions climb from 6 to 11 for barely any fraud-recall gain an unacceptable trade given legitimate-customer experience is a real cost.
+
+### FP-Constrained Threshold Search
+Instead, every candidate threshold is scanned directly, filtered to only those keeping **false positives on Legit transactions within an explicit budget**, and among those the one catching the most fraud is selected. This protects the side of the confusion matrix that was already performing well while still maximizing fraud capture within that constraint.
+
+### Three-Tier Decision Policy
+Because error analysis showed the remaining missed-fraud cases split into two groups some near-indistinguishable from legit, others with real separating margin the binary threshold couldn't reach without more false positives a three-tier system was adopted instead of one cutoff:
+
+| Tier | Action |
+|---|---|
+| **Score below lower threshold** | Auto-approve |
+| **Score in the middle band** | Route to manual review |
+| **Score above upper threshold** | Auto-block |
+
+This is standard practice in production fraud systems for good reason: it recovers value from the "recoverable but ambiguous" cases without touching the auto-block false-positive budget the business is already satisfied with. The width of the review band is a **business decision** (review-team capacity) layered on top of a statistical one.
+
+--------  
+**![Confusion Matrix](./Confusion%20Matrix.png)**  
+--------
+
+---
+
+## 🔬 Model Evaluation & Diagnostics
+
+Standard metrics were only the starting point the real diagnostic work happened at the level of *individual missed transactions*, not aggregate scores.
+
+### Standard Metrics
+- Classification report (precision / recall / F1 per class)
+- Confusion matrix at the FP-constrained threshold
+- Precision-Recall curve and PR-AUC (primary metric, appropriate for imbalanced classes)
+- ROC curve and ROC-AUC (secondary)
+
+--------  
+****![Recall](./Recall%20.png)**  **  
+--------
+
+
+### Feature Importance
+Ranked importance was checked after every feature-engineering round specifically to verify whether new features were actually being used by the model several rounds of engineered features (interaction terms, one-hot buckets) ranked at or near **zero importance**, directly confirming they added no real signal before more time was spent on them.
+
+### SHAP Analysis
+`TreeExplainer` was used to inspect what the model actually relies on globally, and to break down individual missed-fraud predictions feature-by-feature showing precisely which signals pushed a specific fraud case toward "legit" in the model's eyes.
+
+### Nearest-Neighbor Overlap Check
+For every missed-fraud case, its closest legitimate transaction in standardized feature space was identified and measured. This directly tested whether the model was failing due to insufficient training emphasis (fixable by reweighting) or genuine feature-space overlap (not fixable without new data):
+
+- **Median distance, missed fraud → nearest legit: 0.57**
+- **Median distance, caught fraud → nearest legit: 7.89**
+
+---
+
+## 📈 Results Summary
+
+| Iteration | Legit TN | Legit FP | Fraud FN | Fraud TP | Notes |
+|---|---|---|---|---|---|
+| Baseline XGBoost | 2,063 | 6 | 40 | 159 | Initial model, default feature set |
+| Recall-target threshold (0.80) | 2,058 | 11 | 39 | 160 | **Rejected** — FP nearly doubled for +1 TP |
+| FP-constrained threshold | 2,063 | 6 | 40 | 159 | Restored Legit performance, same fraud recall |
+| + Interaction features | 2,063 | 6 | 40 | 159 | No change — features ranked near-zero importance |
+| + Sample-weighted established fraud | 2,063 | 6 | 40 | 159 | No change — confirmed a data ceiling, not a weighting problem |
+| + Random Forest (class_weight) | 2,063 | 6 | 40 | 159 | **Identical** miss-set to XGBoost — algorithm-independent confirmation |
+| + Entity-linkage features (device/IP reuse, kyc_tier_low, corridor_risk) | 2,063 | 6 | **38** | **161** | **First genuine improvement** — new information, not repackaged signal |
+| + is_night_transaction | 2,063 | 6 | 39 | 160 | Tested, reverted — net negative |
+
+---
+
+## 💡 Key Findings
+
+1. **Account age is the single strongest fraud predictor**  accounts under 90 days show a 35–44% fraud rate versus an 8.8% baseline, a 4–5x lift.
+2. **Transaction velocity dominates model decision-making** — `txn_velocity_1h` and `txn_velocity_24h` combined account for the majority of total feature importance in the tuned model.
+3. **Fraud is not one homogeneous pattern.** Two distinct sub-populations emerged from error analysis: fast, high-velocity fraud on young accounts (well-detected), and quieter, established-account fraud that mimics legitimate behavior on every existing signal (the hard cases).
+4. **Reweighting.** An aggressive ~31x combined class-weighting intervention on the harder fraud sub-population produced zero change in outcome direct evidence the bottleneck was informational, not about training emphasis.
+5. **Entity-linkage features (device/IP reuse across accounts) were the first genuinely new signal source tried**, and the only intervention in the entire iteration history to move the confusion matrix — validating that further gains require new *information*, not more feature transformation of the same columns.
+6. **A three-tier decision policy outperforms a single threshold** for this problem: it recovers value from ambiguous, separable cases without compromising the false-positive budget on cases the model is already confident about.
+
+---
+
+## 📁 Project Structure
+
+```
+Novapay-fraudulent/
+├── data/
+│   └── nova_pay_combined.csv          # Raw transaction data
+├── notebook/
+│   └── EDA.ipynb                      # Full exploratory analysis, cleaning, and iteration history
+├── fraud_model_pipeline.py            # Baseline pipeline: cleaning → features → XGBoost → evaluation
+├── fraud_model_enriched_pipeline.py   # Enriched pipeline: entity-linkage features, hyperparameter
+│                                       # search, FP-constrained threshold tuning, error analysis,
+│                                       # Random Forest comparison, SHAP + nearest-neighbor diagnostics
+└── README.md                          # This file
+```
+
+---
+
+
+## 🧰 Tech Stack
+
+- **Data manipulation:** pandas, NumPy
+- **Visualization:** Matplotlib, Seaborn
+- **Modeling:** scikit-learn (XGBoost, RandomForestClassifier, LogisticRegression), CatBoost
+- **Model selection:** `RandomizedSearchCV`
+- **Interpretability:** SHAP
+- **Environment:** Jupyter / VS Code Interactive Window
+
+---
+
+<div align="center">
+
+
+*Built as part of the NovaPay Fraud Detection project.*
+[![LinkedIn:](https://shields.io)](www.linkedin.com/in/eliasdatascientist)
+[![LinkedIn:](https://shields.io)](www.linkedin.com/in/elias-data-scientist)
+
+
+</div>
