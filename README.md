@@ -4,7 +4,9 @@
 ### Real-Time Fraud Detection for Digital Payments
 
 --------  
-**![NovaPayAI Dashboard](./NovaPayAI%20Dashboard.png)**  
+
+**![NovaPayAI Dashboard](./notebook/Images/NovaPayAI%20Dashboard.png)** 
+
 --------
 
 </div>
@@ -41,7 +43,7 @@ Rather than reacting to fraud after money has already moved, NovaPay FraudGuard 
 Beyond the technical detection layer, the project also aims to strengthen trust in the platform. When customers know their transactions are monitored intelligently, they use the service with more confidence making this as much a trust and safety investment as a technical one.
 
 --------  
-**![Distribution of Destination Currencies](./Distribution%20of%20Destination%20Currencies.png)**  
+**![Distribution of Destination Currencies](./notebook/Images/Distribution%20of%20Destination%20Currencies.png)**  
 --------
 
 ---
@@ -165,7 +167,7 @@ Data quality issues were investigated and resolved methodically before any model
 - Identified legitimate negative values (refunds/reversals) versus data errors, and handled each differently rather than blanket-clipping to zero
 
 --------  
-**![Correlation Heatmap](./Correlation%20Heatmap.png)**  
+**![Correlation Heatmap](./notebook/Images/Correlation%20Heatmap.png)**  
 --------
 
 ---
@@ -178,14 +180,14 @@ EDA was used to find *where* fraud concentrates every subsequent engineered feat
 Fraud is not evenly distributed across the 24-hour cycle — early-morning hours show a materially elevated fraud rate compared to the daily average.
 
 --------  
-**![Fraud Rate by Hour](./Fraud%20Rate%20by%20Hour.png)**  
+**![Fraud Rate by Hour](./notebook/Images/Fraud%20Rate%20by%20Hour.png)**  
 --------
 
 ### Fraud Rate by Channel
 Web-based transactions carry a disproportionately higher fraud rate than mobile or ATM channels.
 
 --------  
-**![Fraud Rate by Channel](./Fraud%20Rate%20by%20.png)**   
+**![Fraud Rate by Channel](./notebook/Images/Fraud%20Rate%20by%20Channel.png)**   
 --------
 
 ### Fraud Rate by Account Age
@@ -203,7 +205,9 @@ This was one of the strongest signals found in the entire dataset:
 Accounts under 90 days old are **4–5x more likely** to be fraudulent than the dataset average a young account is one of the single clearest fraud indicators available. This finding directly shaped the `age_bucket` and `rate_age_bucket` engineered features (see below).
 
 --------  
-**![Fraud Rate by Account Age](./Fraud%20Rate%20by%20Account%20Age.png)**  
+
+**![Fraud Rate by Account Age](./notebook/Images/Fraud%20Rate%20by%20Account%20Age.png)**
+
 --------
 
 ### Fraud Rate by Chargeback History, Location Mismatch, and New Device
@@ -213,7 +217,9 @@ Each of these categorical/binary signals showed a clear, monotonic relationship 
 A correlation heatmap across all numerical variables was used to identify the strongest linear fraud predictors and to check for problematic multicollinearity between engineered and raw features before modeling.
 
 --------  
-**![Fraud Correlation Analysis](./Fraud%20Correlation%20Analysis.png)**  
+
+**![Fraud Correlation Analysis](./notebook/Images/Fraud%20Correlation%20Analysis.png)**  
+
 --------
 
 ### Outlier Analysis
@@ -221,9 +227,14 @@ IQR-based outlier detection was run across all numeric columns (`amount_usd`, `f
 
 **Important methodological decision:** in a fraud dataset, statistical "outliers" are frequently not noise  they're often *the fraud signal itself*. An unusually high transaction velocity or risk score is exactly what fraud looks like. Blanket outlier removal or capping was deliberately avoided for these columns, since tree-based models (used throughout this project) are already fairly robust to extreme values, and clipping them risks erasing the very extremity that makes fraud detectable. Outliers were investigated and characterized, not stripped by default.
 
---------  
-**![ Boxplot](./Boxplot%20.png)**  
+-------- 
+
+**![Barchat](./notebook/Images/RF_SHAP_top15.png)**
+
+
 --------
+
+
 
 ---
 
@@ -271,9 +282,13 @@ Every engineered feature below was added for a specific, EDA-grounded reason —
 - Categorical features: constant imputation → encoding (label codes for ordinal-like categories, aligned across train/test to avoid unseen-category errors)
 - All ratio-derived features passed through an explicit `inf` sanitization pass before training, since divisions (`amount_to_fee_ratio`, `velocity_ratio`) can produce `inf` on edge-case denominators.
 
-
-**![Summary](./Confusion%20Summary.png)**  
 ---
+
+**![Channel](./notebook/Images/Fraud%20Rate.png)**  
+
+---
+
+
 
 ## ⚖️ Handling Class Imbalance
 
@@ -304,9 +319,11 @@ Because error analysis showed the remaining missed-fraud cases split into two gr
 
 This is standard practice in production fraud systems for good reason: it recovers value from the "recoverable but ambiguous" cases without touching the auto-block false-positive budget the business is already satisfied with. The width of the review band is a **business decision** (review-team capacity) layered on top of a statistical one.
 
---------  
-**![Confusion Matrix](./Confusion%20Matrix.png)**  
---------
+---
+
+**![Confusion Matrix](./notebook/Images/Confusion%20Matrix.png)**
+
+---
 
 ---
 
@@ -320,9 +337,11 @@ Standard metrics were only the starting point the real diagnostic work happened 
 - Precision-Recall curve and PR-AUC (primary metric, appropriate for imbalanced classes)
 - ROC curve and ROC-AUC (secondary)
 
---------  
-****![Recall](./Recall%20.png)**  **  
---------
+---
+
+**![Recall](./notebook/Images/Recall.png)**
+
+---
 
 
 ### Feature Importance
@@ -398,8 +417,10 @@ Novapay-fraudulent/
 
 
 *Built as part of the NovaPay Fraud Detection project.*
-[![LinkedIn:](https://shields.io)](www.linkedin.com/in/eliasdatascientist)
-[![LinkedIn:](https://shields.io)](www.linkedin.com/in/elias-data-scientist)
+
+[![LinkedIn](https://shields.io)](https://eliasdatascientist)
+
+[![LinkedIn](https://shields.io)](www.linkedin.com/in/elias-data-scientist)
 
 
 </div>
