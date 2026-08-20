@@ -4,3 +4,4 @@ Pattern_Detector/
 anaconda_projects/
 catboost_info/
 .dockerignore
+__pycache__/
