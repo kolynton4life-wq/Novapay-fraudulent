@@ -1,6 +1,6 @@
 nove-venv/
 .env
-_pycache_
+__pycache__
 anaconda_projects/
 catboost_info/
 Pattern_Detector/
