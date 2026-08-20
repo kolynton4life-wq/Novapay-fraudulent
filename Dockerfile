@@ -6,9 +6,6 @@ COPY requirements.txt .
 
 
 
-#install our dependencies without cache
-RUN pip install --no-cache-dir -r requirements.txt
-
 
 # Install packages and immediately strip away all internal test files to save space
 RUN pip install --no-cache-dir -r requirements.txt && \
@@ -21,5 +18,6 @@ COPY . .
 EXPOSE 8000
 #Specify the command to ececute our application
 CMD [ "uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]
+
 
 
