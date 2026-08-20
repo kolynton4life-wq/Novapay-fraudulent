@@ -418,9 +418,6 @@ Novapay-fraudulent/
 
 *Built as part of the NovaPay Fraud Detection project.*
 
-[![LinkedIn](https://shields.io)](https://eliasdatascientist)
-
-[![LinkedIn](https://shields.io)](www.linkedin.com/in/elias-data-scientist)
-
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-0A66C2?style=flat&logo=linkedin&logoColor=white)](https://www.linkedin.com/in/elias-data-scientist)
 
 </div>
