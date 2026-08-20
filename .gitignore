@@ -3,3 +3,4 @@ nova-venv
 Pattern_Detector/
 anaconda_projects/
 catboost_info/
+.dockerignore
